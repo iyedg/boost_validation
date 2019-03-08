@@ -1,6 +1,7 @@
 import pandas as pd
 import json
 from pathlib import Path
+import numpy as np
 
 
 def generate_csv():
@@ -89,7 +90,7 @@ def top_level_budget(df, year, top_level_budget_string="ميزانية الوز�
     unique_organizations = set(year_df.organization_name.unique())
     organization_w_top_level_budget = set(
         year_df.loc[
-            year_df.budget_type_name == top_level_budget, "organization_name"
+            year_df.budget_type_name == top_level_budget_string, "organization_name"
         ].unique()
     )
     if len(unique_organizations) >= len(organization_w_top_level_budget):
@@ -97,3 +98,87 @@ def top_level_budget(df, year, top_level_budget_string="ميزانية الوز�
     else:
         # !TODO: this is probably unnecessary but am too tired to think
         return organization_w_top_level_budget.difference(unique_organizations)
+
+
+def summed_state_budget(df, year):
+    """Return the sum of the typed details of the state budget: ministries + state-level expenses.
+
+    Arguments:
+        df {pd.DataFrame} -- Expenses DataFrame
+        year {int} -- Validation occurs over one year
+
+    Returns:
+        dict -- a dict containing `sum_ministries` for the sum of ministries' budgets and `sum_other` for state-level expenses.
+    """
+    sum_ministries = df.loc[
+        (df.organization_name != "الدولة")
+        & (df.budget_type_name == "ميزانية الوزارة")
+        & (df.year == year),
+        "value",
+    ].agg("sum")
+    sum_other = df.loc[
+        (df.organization_name == "الدولة")
+        & (df.budget_type_name.isin(["الدين العمومي", "نفقات طارئة و غير موزعة"]))
+        & (df.year == year),
+        "value",
+    ].agg(sum)
+    return {
+        "sum_ministries": np.round(sum_ministries, 4),
+        "sum_other": np.round(sum_other, 4),
+    }
+
+
+def state_budget(df, year):
+    """Return the typed value for the state budget for the given year.
+
+    Arguments:
+        df {pd.DataFrame} -- Expenses DataFrame
+        year {int} -- Validation occurs over one year
+
+    Returns:
+        int -- the typed state budget for the given year
+    """
+    return np.round(
+        df.loc[
+            (
+                df.organization_name == "الدولة"
+            )  # ? redundant !! why did I put it here ?!!
+            & (df.budget_type_name == "ميزانية الدولة")
+            & (df.year == year),
+            "value",
+        ].agg(sum)
+    )
+
+
+def budget_gap(df):
+    BUDGET = df
+    gen_agg = (
+        BUDGET.groupby(["year", "extra", "organization_name", "parent_name"])
+        .agg(sum)
+        .reset_index()
+    )
+    gen_typed = BUDGET[BUDGET.budget_type_name.isin(BUDGET.parent_name)]
+    M = (
+        pd.merge(
+            right=gen_typed,
+            right_on=["budget_type_name", "organization_name", "year", "extra"],
+            left=gen_agg,
+            left_on=["parent_name", "organization_name", "year", "extra"],
+            suffixes=("_agg", "_typed"),
+        )
+        .pipe(lambda df: df.assign(value_agg=pd.to_numeric(df.value_agg)))
+        .pipe(lambda df: df.assign(value_typed=pd.to_numeric(df.value_typed)))
+        .pipe(lambda df: df.assign(gap=np.round(df.value_typed - df.value_agg, 3)))
+        .pipe(
+            lambda df: df.assign(
+                double=np.round(
+                    df[["value_agg", "value_typed"]].max(axis=1)
+                    / df[["value_agg", "value_typed"]].min(axis=1),
+                    3,
+                )
+            )
+        )
+        .pipe(lambda df: df.loc[df.organization_name != "الدولة"])
+        .drop(columns=["parent_name_agg"])
+    )
+    return M
