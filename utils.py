@@ -9,7 +9,7 @@ def generate_csv():
     saisie = pd.read_excel("data/saisie.xlsx", sheet_name=None)
     for sheet_name in saisie:
         try:
-            saisie[sheet_name].to_csv(
+            saisie[sheet_name].dropna(how="all").to_csv(
                 "./data/generated/{}.csv".format(sheet_name), index=False
             )
         except Exception as e:
@@ -77,3 +77,23 @@ def merge(
         for transformer in transformer_list:
             merged.loc[:, col_name] = merged.loc[:, col_name].apply(transformer)
     return merged
+
+
+def top_level_budget(df, year, top_level_budget_string="ميزانية الوزارة"):
+    """Return a list of organizations that to do not contain a top level budget type, if any.
+
+    Arguments:
+        year {int} -- validation is limited to the span of one year
+    """
+    year_df = df.pipe(lambda df: df.loc[df.year == year])
+    unique_organizations = set(year_df.organization_name.unique())
+    organization_w_top_level_budget = set(
+        year_df.loc[
+            year_df.budget_type_name == top_level_budget, "organization_name"
+        ].unique()
+    )
+    if len(unique_organizations) >= len(organization_w_top_level_budget):
+        return unique_organizations.difference(organization_w_top_level_budget)
+    else:
+        # !TODO: this is probably unnecessary but am too tired to think
+        return organization_w_top_level_budget.difference(unique_organizations)
