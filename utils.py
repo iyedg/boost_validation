@@ -1,17 +1,39 @@
 import pandas as pd
 import json
-from pandas.io.json import json_normalize
+from pathlib import Path
 
 
-def load_df(file_name):
-    """Return a DataFrame of a json file from the directory data.
+def generate_csv():
+    """Create a csv file for each worksheet in saisie.xlsx.
+    """
+    saisie = pd.read_excel("data/saisie.xlsx", sheet_name=None)
+    for sheet_name in saisie:
+        try:
+            saisie[sheet_name].to_csv(
+                "./data/generated/{}.csv".format(sheet_name), index=False
+            )
+        except Exception as e:
+            print(sheet_name)
+            print(e)
+            pass
+
+
+def load_sheet(sheet_name):
+    """Return a DataFrame from saisie.xlsx for the corresponding sheet name.
+
+    This function checks if a csv file with the corresponding sheet name is already generated,
+    if such a file exists return it as a DataFrame, else generate all csv files from saisie.xlsx
+    then return the DataFrame.
 
     Arguments:
-        file_name {str} -- json file name without extension from the directory data
+        sheet_name {string} -- Name of worksheet to be loaded from saisie.xlsx
     """
-    with open("data/{}.json".format(file_name)) as f:
-        data = json.load(f)
-    return json_normalize(data[file_name])
+    csv_sheet_path = Path("data/generated/{}.csv".format(sheet_name))
+    if csv_sheet_path.exists():
+        return pd.read_csv(str(csv_sheet_path))
+    else:
+        generate_csv()
+        return pd.read_csv(str(csv_sheet_path))
 
 
 def merge(
