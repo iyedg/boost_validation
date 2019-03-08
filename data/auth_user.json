@@ -1,0 +1,18 @@
+{
+	"auth_user":
+	[
+		{
+			"id":1,
+			"password":"pbkdf2_sha256$120000$FP0NpwoxS04m$UD0w1Wg2bOCWNPH1D4TABwJZ6bf25wK/myu8xYTzdZ0=",
+			"last_login":"2019-02-28T20:15:02.000Z",
+			"is_superuser":True,
+			"username":"admin",
+			"first_name":"",
+			"last_name":"",
+			"email":"mabrouk.sassi@albawsala.com",
+			"is_staff":True,
+			"is_active":True,
+			"date_joined":"2019-02-28T19:08:47.000Z"
+		}
+	]
+}

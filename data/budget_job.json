@@ -1,0 +1,26 @@
+{
+	"budget_job":
+	[
+		{
+			"id":1,
+			"name":"Ministre",
+			"name_fr":"Ministre",
+			"name_en":"Minister",
+			"name_ar":"وزير"
+		},
+		{
+			"id":2,
+			"name":"Secrétaire Générale",
+			"name_fr":"Secrétaire Générale",
+			"name_en":"General Secretary",
+			"name_ar":"أمين العام"
+		},
+		{
+			"id":3,
+			"name":"Directeur",
+			"name_fr":"Directeur",
+			"name_en":"Director",
+			"name_ar":"مدير"
+		}
+	]
+}

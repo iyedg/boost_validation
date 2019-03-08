@@ -1,0 +1,29 @@
+{
+	"budget_outstandingdebt":
+	[
+		{
+			"id":5,
+			"year":2015,
+			"outstanding_debt":46922,
+			"gdp":84648
+		},
+		{
+			"id":4,
+			"year":2016,
+			"outstanding_debt":55919,
+			"gdp":89804.4
+		},
+		{
+			"id":3,
+			"year":2017,
+			"outstanding_debt":68074,
+			"gdp":96660.1
+		},
+		{
+			"id":2,
+			"year":2018,
+			"outstanding_debt":76165,
+			"gdp":99076.6
+		}
+	]
+}

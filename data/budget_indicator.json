@@ -1,0 +1,113 @@
+{
+	"budget_indicator":
+	[
+		{
+			"id":1,
+			"label":"Taux de chômage",
+			"label_fr":"Taux de chômage",
+			"label_en":"Unemployment rate",
+			"label_ar":"معدل البطالة",
+			"is_hypothesis":False,
+			"unit":"%",
+			"unit_ar":"%",
+			"unit_en":"%",
+			"unit_fr":"%"
+		},
+		{
+			"id":2,
+			"label":"Population active",
+			"label_fr":"Population active",
+			"label_en":"Active population",
+			"label_ar":"عدد السكان",
+			"is_hypothesis":False,
+			"unit":"",
+			"unit_ar":"",
+			"unit_en":"",
+			"unit_fr":""
+		},
+		{
+			"id":3,
+			"label":"Yen",
+			"label_fr":"Yen",
+			"label_en":"Yen",
+			"label_ar":"Yen",
+			"is_hypothesis":True,
+			"unit":"DT",
+			"unit_ar":"د.ت",
+			"unit_en":"DT",
+			"unit_fr":"DT"
+		},
+		{
+			"id":4,
+			"label":"Dollars",
+			"label_fr":"Dollars",
+			"label_en":"",
+			"label_ar":"",
+			"is_hypothesis":True,
+			"unit":"DT",
+			"unit_ar":"د.ت",
+			"unit_en":"TND",
+			"unit_fr":"DT"
+		},
+		{
+			"id":5,
+			"label":"Euro",
+			"label_fr":"Euro",
+			"label_en":"",
+			"label_ar":"",
+			"is_hypothesis":True,
+			"unit":"DT",
+			"unit_ar":"د.ت",
+			"unit_en":"TND",
+			"unit_fr":"DT"
+		},
+		{
+			"id":6,
+			"label":"Croissance économique",
+			"label_fr":"Croissance économique",
+			"label_en":"",
+			"label_ar":"",
+			"is_hypothesis":True,
+			"unit":"%",
+			"unit_ar":"%",
+			"unit_en":"%",
+			"unit_fr":"%"
+		},
+		{
+			"id":7,
+			"label":"Taux d'Inflation",
+			"label_fr":"Taux d'Inflation",
+			"label_en":"",
+			"label_ar":"",
+			"is_hypothesis":True,
+			"unit":"%",
+			"unit_ar":"%",
+			"unit_en":"%",
+			"unit_fr":"%"
+		},
+		{
+			"id":8,
+			"label":"Déficit Budgétaire",
+			"label_fr":"Déficit Budgétaire",
+			"label_en":"",
+			"label_ar":"",
+			"is_hypothesis":True,
+			"unit":"%",
+			"unit_ar":"%",
+			"unit_en":"%",
+			"unit_fr":"%"
+		},
+		{
+			"id":9,
+			"label":"Prix du baril de pétrole",
+			"label_fr":"Prix du baril de pétrole",
+			"label_en":"",
+			"label_ar":"",
+			"is_hypothesis":True,
+			"unit":"$",
+			"unit_ar":"$",
+			"unit_en":"$",
+			"unit_fr":"$"
+		}
+	]
+}

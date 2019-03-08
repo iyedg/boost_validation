@@ -1,0 +1,85 @@
+{
+	"budget_debtorigin":
+	[
+		{
+			"id":1,
+			"name":"Dette intérieure",
+			"name_fr":"Dette intérieure",
+			"name_en":"Internal Debt",
+			"name_ar":"الدين الداخلي",
+			"description":"",
+			"description_fr":"",
+			"description_en":"",
+			"description_ar":"",
+			"lft":1,
+			"rght":2,
+			"tree_id":2,
+			"level":0,
+			"parent_id":null
+		},
+		{
+			"id":2,
+			"name":"Dette extérieure",
+			"name_fr":"Dette extérieure",
+			"name_en":"External Debt",
+			"name_ar":"الدين الخارجي",
+			"description":"",
+			"description_fr":"",
+			"description_en":"",
+			"description_ar":"",
+			"lft":1,
+			"rght":8,
+			"tree_id":1,
+			"level":0,
+			"parent_id":null
+		},
+		{
+			"id":3,
+			"name":"Marchés financiers",
+			"name_fr":"Marchés financiers",
+			"name_en":"Financial markets",
+			"name_ar":"الأسواق المالية",
+			"description":"",
+			"description_fr":"",
+			"description_en":"",
+			"description_ar":"",
+			"lft":6,
+			"rght":7,
+			"tree_id":1,
+			"level":1,
+			"parent_id":2
+		},
+		{
+			"id":4,
+			"name":"Coopération bilatérale",
+			"name_fr":"Coopération bilatérale",
+			"name_en":"Bilateral cooperation",
+			"name_ar":"التعاون الثنائي",
+			"description":"",
+			"description_fr":"",
+			"description_en":"",
+			"description_ar":"",
+			"lft":2,
+			"rght":3,
+			"tree_id":1,
+			"level":1,
+			"parent_id":2
+		},
+		{
+			"id":5,
+			"name":"Coopération multilatérale",
+			"name_fr":"Coopération multilatérale",
+			"name_en":"Multilateral cooperation",
+			"name_ar":"التعاون المتعدد الأطراف",
+			"description":"",
+			"description_fr":"",
+			"description_en":"",
+			"description_ar":"",
+			"lft":4,
+			"rght":5,
+			"tree_id":1,
+			"level":1,
+			"parent_id":2
+		}
+	]
+}
