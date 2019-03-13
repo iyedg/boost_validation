@@ -116,15 +116,23 @@ def summed_state_budget(df, year):
         & (df.year == year),
         "value",
     ].agg("sum")
-    sum_other = df.loc[
+    sum_imprev = df.loc[
         (df.organization_name == "الدولة")
-        & (df.budget_type_name.isin(["الدين العمومي", "نفقات طارئة و غير موزعة"]))
+        & (df.budget_type_name.isin(["نفقات طارئة و غير موزعة"]))
         & (df.year == year),
         "value",
     ].agg(sum)
+    sum_debt = df.loc[
+        (df.organization_name == "الدولة")
+        & (df.budget_type_name.isin(["الدين العمومي"]))
+        & (df.year == year),
+        "value",
+    ].agg(sum)
+
     return {
         "sum_ministries": np.round(sum_ministries, 4),
-        "sum_other": np.round(sum_other, 4),
+        "public_debt": np.round(sum_debt, 4),
+        "imprev": np.round(sum_imprev, 4),
     }
 
 
