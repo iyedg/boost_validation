@@ -2,6 +2,8 @@ import pandas as pd
 import json
 from pathlib import Path
 import numpy as np
+from sheet_loader.loader import get_worksheet_as_df
+from tqdm import tqdm_notebook
 
 
 def generate_csv():
@@ -35,6 +37,61 @@ def load_sheet(sheet_name):
     else:
         generate_csv()
         return pd.read_csv(str(csv_sheet_path))
+
+
+def load_data():
+    data = {}
+    pbar = tqdm_notebook(["budget_by_type", "budget_type", "resource_type", "resource"])
+    for sheet_name in pbar:
+        pbar.set_description = "Downloading {}".format(sheet_name)
+        df = get_worksheet_as_df(sheet_name)
+        if sheet_name == "resource":
+            sheet_name = "resource_by_type"
+        data[sheet_name] = df
+    expenses = merge(
+        hierarchy_df=data["budget_type"],
+        hierarchy_df_on="id",
+        values_df=data["budget_by_type"],
+        values_df_on="type",
+        hierarchy_suffix="_bt",
+        values_suffix="_bbt",
+        drop_cols=[
+            "name_fr",
+            "name_en",
+            "name_ar",
+            "name",
+            "description",
+            "id_bt",
+            "parent_id",
+            "type",
+            "id_bbt",
+            "organization",
+        ],
+    )
+    revenues = merge(
+        hierarchy_df=data["resource_type"],
+        hierarchy_df_on="id",
+        values_df=data["resource_by_type"],
+        values_df_on="type",
+        hierarchy_suffix="_rt",
+        values_suffix="_rbt",
+        drop_cols=[
+            "name_fr",
+            "name_en",
+            "name_ar",
+            "description",
+            "description_fr",
+            "description_ar",
+            "description_en",
+            "level",
+            "id_rt",
+            "parent_id",
+            "id_rbt",
+        ],
+    )
+    data["expenses"] = expenses
+    data["revenues"] = revenues
+    return data
 
 
 def merge(
@@ -159,13 +216,12 @@ def state_budget(df, year):
 
 
 def budget_gap(df):
-    BUDGET = df
     gen_agg = (
-        BUDGET.groupby(["year", "extra", "organization_name", "parent_name"])
+        df.groupby(["year", "extra", "organization_name", "parent_name"])
         .agg(sum)
         .reset_index()
     )
-    gen_typed = BUDGET[BUDGET.budget_type_name.isin(BUDGET.parent_name)]
+    gen_typed = df[df.budget_type_name.isin(df.parent_name)]
     M = (
         pd.merge(
             right=gen_typed,
@@ -190,3 +246,17 @@ def budget_gap(df):
         .drop(columns=["parent_name_agg"])
     )
     return M
+
+
+def summed_budget_typed_budget(expenses):
+    records = []
+    for year in expenses.year.unique():
+        ssb = summed_state_budget(expenses, year)
+        sum_ssb = np.round(sum(ssb.values(), 3))
+        expected_budget = state_budget(expenses, year)
+        ssb["year"] = year
+        ssb["budget_expected"] = expected_budget
+        ssb["budget_summed"] = sum_ssb
+        ssb["gap"] = np.round(expected_budget - sum_ssb, 4)
+        records.append(ssb)
+    pd.DataFrame(records).set_index("year").sort_index(axis=1)
